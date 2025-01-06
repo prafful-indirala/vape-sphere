@@ -1,6 +1,7 @@
 'use client'
 
 import { useCartStore } from "@/store/cartStore"
+import { motion } from "framer-motion"
 
 export function CartCounter() {
   const getItemsCount = useCartStore((state) => state.getItemsCount)
@@ -9,9 +10,14 @@ export function CartCounter() {
   if (itemCount === 0) return null
 
   return (
-    <span className="ml-1 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+    <motion.span 
+      className="ml-1 bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs"
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+    >
       {itemCount}
-    </span>
+    </motion.span>
   )
 }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-client'
 
 export async function GET() {
   try {
@@ -9,13 +9,18 @@ export async function GET() {
       .order('id');
 
     if (error) {
-      throw error;
+      console.error('Supabase error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(data || []);
+    if (!data || data.length === 0) {
+      return NextResponse.json({ error: 'No categories found' }, { status: 404 });
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching categories:', error);
-    return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
